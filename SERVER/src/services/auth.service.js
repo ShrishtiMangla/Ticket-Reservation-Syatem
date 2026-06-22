@@ -8,7 +8,7 @@ export const registerUserService = async (userData) => {
         
     }
 
-    const existingUser = await User.findOne({email: userData.email});
+    const existingUser = await User.findOne({email: userData.email}.select);
     if(existingUser){
         throw new Error("User with this email already exists");
     }
@@ -26,7 +26,7 @@ export const registerUserService = async (userData) => {
     })
     
     await user.save()
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "3d" });
+    const token = jwt.sign({ userId: user._id , role: user.role}, process.env.JWT_SECRET, { expiresIn: "3d" });
 
     return { user, token };
 };
@@ -42,7 +42,7 @@ export const loginUserService = async (loginData)=>{
     if(!await bcrypt.compare(loginData.password , user.password)){
         throw new Error("Invalid email or password");
     }
-    const token = jwt.sign({userId: user._id} , process.env.JWT_SECRET , {expiresIn:"3d"});
+    const token = jwt.sign({userId: user._id , role: user.role} , process.env.JWT_SECRET , {expiresIn:"3d"});
     return {user , token};
 }
 
