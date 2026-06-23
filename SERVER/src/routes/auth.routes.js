@@ -11,15 +11,5 @@ const router = Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
-router.get(
-    "/test",
-    authMiddleware,
-    (req,res)=>{
-        res.json({
-            success:true,
-            user:req.user
-        });
-    }
-);
 
 export default router;

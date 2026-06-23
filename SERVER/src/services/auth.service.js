@@ -8,7 +8,7 @@ export const registerUserService = async (userData) => {
         
     }
 
-    const existingUser = await User.findOne({email: userData.email}.select);
+    const existingUser = await User.findOne({email: userData.email});
     if(existingUser){
         throw new Error("User with this email already exists");
     }
