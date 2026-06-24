@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import eventRoutes from "./routes/event.routes.js";
+import bookingRoutes from "./routes/booking.routes.js";
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.json());//so that express can read json data from the request bo
 
 app.use("/api/auth",authRoutes)
 app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.get("/" ,(req , res)=>{
     res.send("Welcome to the ticket reservation system");

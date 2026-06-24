@@ -4,7 +4,7 @@ import {
 
 export const addEvent = async (req, res) => {
     try{
-        const event = await addEventService(req.body);
+        const event = await addEventService(req.body , req.user._id);
         res.status(201).json({
             success:true,
             message:"Event added successfully",

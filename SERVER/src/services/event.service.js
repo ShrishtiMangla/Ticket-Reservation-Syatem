@@ -1,10 +1,11 @@
 import Event from '../models/event.model.js';
 
-export const addEventService = async (eventData) => {
+export const addEventService = async (eventData , userId) => {
     if(eventData.price<0){
         throw new Error("Price cannot be negative");
     }
-
+    eventData.createdBy = userId;
+    eventData.availableSeats = eventData.totalSeats;
     const event = new Event(eventData);
     return await event.save();
 };
