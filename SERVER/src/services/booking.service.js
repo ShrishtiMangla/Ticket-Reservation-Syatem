@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import booking from "../models/booking.model.js"
 import Event from "../models/event.model.js"
+import AppError from "../utils/AppError.js";
 
 export const createBookingService = async (eventId , userId , reqBody) => {
     const session = await mongoose.startSession();
@@ -8,12 +9,12 @@ export const createBookingService = async (eventId , userId , reqBody) => {
         session.startTransaction();
 
         if(reqBody.numberOfSeats <= 0){
-            throw new Error("Number of seats must be greater than 0");
+            throw new AppError("Number of seats must be greater than 0",400);
         }
 
         const e = await Event.findById(eventId).session(session);
         if(!e){
-            throw new Error("Event not found");
+            throw new AppError("Event not found",404);
         }
 
         const event = await Event.findOneAndUpdate( // made code atomic
@@ -29,7 +30,7 @@ export const createBookingService = async (eventId , userId , reqBody) => {
         );
 
         if(!event){
-            throw new Error("Not enough seats available");
+            throw new AppError("Not enough seats available",400);
         }
 
         const totalPrice = event.price * reqBody.numberOfSeats;
@@ -77,10 +78,10 @@ export const getBookingByIdService = async (userId, bookingId) => {
 export const cancelBookingService = async (userId, bookingId) => {
     const bookingDoc = await booking.findOne({_id:bookingId, user:userId});
     if(!bookingDoc){
-        throw new Error("Booking not found");
+        throw new AppError("Booking not found",404);
     };
     if (bookingDoc.bookingStatus === "CANCELLED") {
-        throw new Error("Booking already cancelled");
+        throw new AppError("Booking already cancelled",409);
     }
 
     const session = await mongoose.startSession();

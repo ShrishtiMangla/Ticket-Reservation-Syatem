@@ -1,8 +1,9 @@
 import Event from '../models/event.model.js';
+import AppError from "../utils/AppError.js"
 
 export const addEventService = async (eventData , userId) => {
     if(eventData.price<0){
-        throw new Error("Price cannot be negative");
+        throw new AppError("Price cannot be negative",400);
     }
     eventData.createdBy = userId;
     eventData.availableSeats = eventData.totalSeats;
@@ -21,7 +22,7 @@ export const getEventByIdService = (id)=>{
 
 export const updateEventService = (id, updateData)=>{
     if(updateData.price<0){
-        throw new Error("Price cannot be negative");
+        throw new AppError("Price cannot be negative",400);
     }
     return Event.findByIdAndUpdate(
         id,
