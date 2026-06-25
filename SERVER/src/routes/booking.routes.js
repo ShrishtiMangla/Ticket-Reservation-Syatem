@@ -10,7 +10,7 @@ const router = Router();
 
 router.post('/:id', authMiddleware, authorize('user'), createBooking); // id here is event id
 router.get("/", authMiddleware, authorize('user'), getMyBookings);
-router.get("/:id", authMiddleware, getBookingById);
-router.delete("/:id", authMiddleware, cancelBooking);
+router.get("/:id", authMiddleware, getBookingById);//here is booking id
+router.delete("/:id", authMiddleware, cancelBooking);//here is booking id
 
 export default router;
