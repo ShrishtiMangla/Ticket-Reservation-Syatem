@@ -5,12 +5,16 @@ import {
     cancelBookingService
 } from "../services/booking.service.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import logger from "../utils/logger.js";
 
 export const createBooking = asyncHandler(async (req, res) => {
     const eventId = req.params.id;
     const userId = req.user._id;
 
     const booking = await createBookingService(eventId, userId, req.body);
+    logger.info(
+        `Booking created by ${userId} for event ${event.title}`
+    );
     res.status(201).json({
         success: true,
         message: "Booking created successfully",
@@ -49,6 +53,11 @@ export const cancelBooking = asyncHandler(async (req, res) => {
     const bookingId = req.params.id;
 
     await cancelBookingService(userId, bookingId);
+
+    logger.info(
+        `Booking cancelled: ${bookingId}`
+    );
+
     res.status(200).json({
         success: true,
         message: "Booking cancelled successfully"

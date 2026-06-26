@@ -2,11 +2,14 @@ import {
     addEventService, getAllEventsService, getEventByIdService, updateEventService, deleteEventService
 } from '../services/event.service.js';
 import { asyncHandler } from "../utils/asyncHandler.js";
-
+import logger from '../utils/logger.js';
 
 export const addEvent = asyncHandler(async (req, res) => {
 
     const event = await addEventService(req.body, req.user._id);
+    logger.info(
+        `Admin ${req.user.email} created event ${event.title}`
+    );
     res.status(201).json({
         success: true,
         message: "Event added successfully",
@@ -51,6 +54,9 @@ export const updateEvent = asyncHandler(async (req, res) => {
             message: "Event not found"
         })
     }
+    logger.info(
+        `Event updated: ${event.title}`
+    );
     return res.status(200).json({
         success: true,
         message: "Event updated successfully",
@@ -68,6 +74,9 @@ export const deleteEvent = asyncHandler(async (req, res) => {
             message: "Event not found"
         })
     }
+    logger.info(
+        `Event deleted: ${event.title}`
+    );
     return res.status(200).json({
         success: true,
         message: "Event deleted successfully",
