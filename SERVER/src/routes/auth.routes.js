@@ -4,12 +4,12 @@ import {
     loginUser,
     logoutUser
 } from "../controllers/auth.controller.js";
-import { authMiddleware } from "../middlewares/auth.middleware.js";
+import {authLimiter} from "../middlewares/rateLimiter.middleware.js";
 
 const router = Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/register", authLimiter, registerUser);
+router.post("/login", authLimiter, loginUser);
 router.get("/logout", logoutUser);
 
 export default router;
